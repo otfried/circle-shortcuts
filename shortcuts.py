@@ -28,7 +28,7 @@ def aFromDelta(d):
       a0 = am
   return a0
 
-# compute a*k by binary search
+# compute a* by binary search
 def aStarKFromK(k):
   a0 = 0
   a1 = 2.0
@@ -43,7 +43,8 @@ def aStarKFromK(k):
   return a0
 
 def uptofive1():
-  print("Section 3.1: No combinations\n")
+  print("Section 3.1: No combinations")
+  print("============================\n")
   print("Here we compute Table 1, with a*, d*, and pi - d*")
   print("We already include the values for k = 6")
   for k in range(2, 6):
@@ -52,7 +53,8 @@ def uptofive1():
   print("%d  %1.4f %1.4f %1.4f" % (6, 2.0, delta(2.0), pi - delta(2.0)))
 
 def uptofive2():
-  print("\nSection 3.2: No antipodal pair combinations\n")
+  print("\nSection 3.2: Antipodal pair combinations")
+  print(  "========================================\n")
   print("Computing mu_k")
   for k in range(2, 6):
     ask = aStarKFromK(k)
@@ -60,11 +62,12 @@ def uptofive2():
     muk = aFromDelta(dsk/2)
     print("%d  %1.4f" % (k, muk))
   print("%d  %1.4f" % (6, aFromDelta(delta(2)/2)))
-  lemma6k3()
-  lemma7()
+  lemma7k3()
+  lemma8()
+  lemma7k456()
 
-def lemma6k3():
-  print("\nLemma 6 for k = 3\n")
+def lemma7k3():
+  print("\nLemma 7 for k = 3\n")
   a = aStarKFromK(3)
   ds = delta(a)
   mu = aFromDelta(ds/2)
@@ -90,9 +93,10 @@ def shortLong(ds):
       x1 = x
   return x0, sqrt(4 - x0*x0)
 
-def lemma7():
-  print("\nLemma 7: sigma_k and lambda_k\n")
-  print("k & a*k & d*k & mu_k & sigma_k & lambda_k")
+def lemma8():
+  print("\nLemma 8: sigma_k and lambda_k\n")
+  print("Here we compute Table 2")
+  print("k & a* & d* & mu_k & sigma_k & lambda_k")
   for k in range(4, 7):
     a = aStarKFromK(k)
     ds = delta(a)
@@ -100,7 +104,10 @@ def lemma7():
     sk, lk = shortLong(ds)
     print("%d & %1.4f & %1.4f & %1.4f & %1.4f & %1.4f \\\\" %
           (k, a, ds, mu, sk, lk))
-  print("\nShowing that l = 1:\n")
+
+def lemma7k456():
+  print("\nLemma 7 for k in {4, 5, 6}\n")
+  print("Showing that l = 1:\n")
   for k in range(4, 7):
     a = aStarKFromK(k)
     ds = delta(a)
@@ -114,9 +121,8 @@ def lemma7():
     print("k = %d, d* = %1.4f, sigma = %1.4f, lambda = %1.4f" %
           (k, ds, sk, lk))
     print("  delta^ = %1.4f,  w = (pi - lambda - d^) = %1.4f" % (dh, w))
-    print("  (k-2) * w = %1.4f,  (k-1) * w = %1.4f" % 
-          ((k-2) * w, (k-1) * w))
-  print("\nThe final contradiction:\n")
+    print("  (k-2) * w = %1.4f < pi" % ((k-2) * w))
+  print("\nThe final contradiction of Lemma 6:\n")
   for k in range(4, 7):
     a = aStarKFromK(k)
     ds = delta(a)
@@ -129,9 +135,21 @@ def lemma7():
           (k, dh, ah, w))
     print("   (k-1) * w = %1.4f < pi" % ((k-1) * w))
 
+def uptofive3():
+  print("\nSection 3.3: Combinations allowed")
+  print(  "=================================\n")
+  for k in range(3, 6):
+    ask = aStarKFromK(k)
+    dsk = delta(ask)
+    muk = aFromDelta(dsk/2)
+    w = pi - muk - dsk
+    print("k=%d mu=%1.4f w = pi - mu - d* = %1.4f (k-1)*w = %1.4f < pi" % 
+          (k, muk, w, (k-1)*w))
+
 print("\\begin{verbatim}")
-print("Section 3: Up to five shortcuts\n")
+print("Source code at: http://github.com/otfried/circle-shortcuts\n")
 uptofive1()
 uptofive2()
+uptofive3()
 print("\\end{verbatim}")
 
