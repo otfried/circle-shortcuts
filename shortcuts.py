@@ -7,10 +7,18 @@
 from __future__ import division, print_function
 from math import *
 
+# Lemma numbers
+
+lem_antipodal = 9
+lem_shortlong = 10
+
 # alpha(a)
 def shortcutAngle(a):
   return 2 * asin(a/2)
 
+def aFromAlpha(alpha):
+  return 2 * sin(alpha/2)
+  
 def delta(a):
   return asin(a/2) - a/2
 
@@ -42,7 +50,28 @@ def aStarKFromK(k):
       a0 = am
   return a0
 
+def deepFromA(a):
+  alpha = shortcutAngle(a)
+  x0 = 0
+  x1 = aFromAlpha(alpha/2)
+  while x1 - x0 > 0.00000001:
+    xm = 0.5 * (x0 + x1)
+    arc = shortcutAngle(xm)
+    if xm + a > alpha - arc: 
+      x1 = xm
+    else:
+      x0 = xm
+  return alpha - 2*arc
+
+def deepumbra():
+  print("Section 2:")
+  print("==========\n")
+  print("Computing the length of the deep umbra:")
+  for a in [0.1, 0.2, 0.5, 1.0, 1.5, 1.8, 1.9, 2.0]:
+    print("a = %g,  x = %1.8f" % (a, deepFromA(a)))
+
 def uptofive1():
+  print()
   print("Section 3.1: No combinations")
   print("============================\n")
   print("Here we compute Table 1, with a*, d*, and pi - d*")
@@ -62,12 +91,12 @@ def uptofive2():
     muk = aFromDelta(dsk/2)
     print("%d  %1.4f" % (k, muk))
   print("%d  %1.4f" % (6, aFromDelta(delta(2)/2)))
-  lemma7k3()
-  lemma8()
-  lemma7k456()
+  antipodal_k3()
+  lemma_shortlong()
+  antipodal_k456()
 
-def lemma7k3():
-  print("\nLemma 7 for k = 3\n")
+def antipodal_k3():
+  print("\nLemma %d for k = 3\n" % lem_antipodal)
   a = aStarKFromK(3)
   ds = delta(a)
   mu = aFromDelta(ds/2)
@@ -78,7 +107,8 @@ def lemma7k3():
   print("(vii) a such that delta(a) = 0.06 = %1.4f" % aFromDelta(0.06))
   print("0.54 is %g degrees" % degrees(0.54))
 
-def shortLong(ds):
+# This computation leads to the same results
+def shortLong_alternative(ds):
   # We need to solve delta(x) + delta(y) = ds/2,
   # where x^2 + y^2 = 4
   x0 = 0
@@ -93,8 +123,25 @@ def shortLong(ds):
       x1 = x
   return x0, sqrt(4 - x0*x0)
 
-def lemma8():
-  print("\nLemma 8: sigma_k and lambda_k\n")
+def shortLong(ds):
+  # We need to solve delta(x) + delta(y) = ds/2,
+  # while x + y = pi - ds
+  # so y = pi - ds - x
+  x0 = 0
+  x1 = (pi - ds) / 2
+  target = ds/2
+  while x1 - x0 > 0.00000001:
+    x = 0.5 * (x0 + x1)
+    y = min(pi - ds - x, 2)
+    tm = delta(x) + delta(y)
+    if tm > target:
+      x0 = x
+    else:
+      x1 = x
+  return x0, pi - ds - x0
+
+def lemma_shortlong():
+  print("\nLemma %d: sigma_k and lambda_k\n" % lem_shortlong)
   print("Here we compute Table 2")
   print("k & a* & d* & mu_k & sigma_k & lambda_k")
   for k in range(4, 7):
@@ -104,9 +151,16 @@ def lemma8():
     sk, lk = shortLong(ds)
     print("%d & %1.4f & %1.4f & %1.4f & %1.4f & %1.4f \\\\" %
           (k, a, ds, mu, sk, lk))
+  print("\nCalculations in the lemma:\n")
+  for k in range(4, 7):
+    a = aStarKFromK(k)
+    ds = delta(a)
+    sk, lk = shortLong(ds)
+    print(" k=%d: 2 * delta(lambda_k) = %1.4f, d*/2 = %1.4f" %
+          (k, 2*delta(lk), ds/2))
 
-def lemma7k456():
-  print("\nLemma 7 for k in {4, 5, 6}\n")
+def antipodal_k456():
+  print("\nLemma %d for k in {4, 5, 6}\n" % lem_antipodal)
   print("Showing that l = 1:\n")
   for k in range(4, 7):
     a = aStarKFromK(k)
@@ -148,6 +202,7 @@ def uptofive3():
 
 print("\\begin{verbatim}")
 print("Source code at: http://github.com/otfried/circle-shortcuts\n")
+deepumbra()
 uptofive1()
 uptofive2()
 uptofive3()
