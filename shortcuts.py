@@ -50,32 +50,11 @@ def aStarKFromK(k):
       a0 = am
   return a0
 
-def deepFromA(a):
-  alpha = shortcutAngle(a)
-  x0 = 0
-  x1 = aFromAlpha(alpha/2)
-  while x1 - x0 > 0.00000001:
-    xm = 0.5 * (x0 + x1)
-    arc = shortcutAngle(xm)
-    if xm + a > alpha - arc: 
-      x1 = xm
-    else:
-      x0 = xm
-  return alpha - 2*arc
-
-def deepumbra():
-  print("Section 2:")
-  print("==========\n")
-  print("Computing the length of the deep umbra:")
-  for a in [0.1, 0.2, 0.5, 1.0, 1.5, 1.8, 1.9, 2.0]:
-    print("a = %g,  x = %1.8f" % (a, deepFromA(a)))
-
 def uptofive1():
-  print()
   print("Section 3.1: No combinations")
   print("============================\n")
-  print("Here we compute Table 1, with a*, d*, and pi - d*")
-  print("We already include the values for k = 6")
+  print("Table 1:")
+  print("k  a*     d*     pi - d*")
   for k in range(2, 6):
     ask = aStarKFromK(k)
     print("%d  %1.4f %1.4f %1.4f" % (k, ask, delta(ask), pi - delta(ask)))
@@ -84,13 +63,13 @@ def uptofive1():
 def uptofive2():
   print("\nSection 3.2: Antipodal pair combinations")
   print(  "========================================\n")
-  print("Computing mu_k")
+  print("Computing mu_k:")
   for k in range(2, 6):
     ask = aStarKFromK(k)
     dsk = delta(ask)
     muk = aFromDelta(dsk/2)
-    print("%d  %1.4f" % (k, muk))
-  print("%d  %1.4f" % (6, aFromDelta(delta(2)/2)))
+    print("mu_%d = %1.4f" % (k, muk))
+  print("mu_6 = %1.4f" % (aFromDelta(delta(2)/2)))
   antipodal_k3()
   lemma_shortlong()
   antipodal_k456()
@@ -105,35 +84,16 @@ def antipodal_k3():
   print("(v) delta(1.45) = %1.4f" % delta(1.45))
   print("(vi) delta(pi/2) = %1.4f" % delta(pi/2))
   print("(vii) a such that delta(a) = 0.06 = %1.4f" % aFromDelta(0.06))
-  print("0.54 is %g degrees" % degrees(0.54))
-
-# This computation leads to the same results
-def shortLong_alternative(ds):
-  # We need to solve delta(x) + delta(y) = ds/2,
-  # where x^2 + y^2 = 4
-  x0 = 0
-  x1 = sqrt(2)
-  target = ds/2
-  while x1 - x0 > 0.00000001:
-    x = 0.5 * (x0 + x1)
-    tm = delta(x) + delta(sqrt(4 - x*x))
-    if tm > target:
-      x0 = x
-    else:
-      x1 = x
-  return x0, sqrt(4 - x0*x0)
 
 def shortLong(ds):
-  # We need to solve delta(x) + delta(y) = ds/2,
-  # while x + y = pi - ds
-  # so y = pi - ds - x
-  x0 = 0
+  # We need to solve delta(x) + delta(pi - ds - x) = ds/2,
+  # for x in [pi - ds - 2, (pi-ds)/2]
+  x0 = pi - ds - 2
   x1 = (pi - ds) / 2
   target = ds/2
   while x1 - x0 > 0.00000001:
     x = 0.5 * (x0 + x1)
-    y = min(pi - ds - x, 2)
-    tm = delta(x) + delta(y)
+    tm = delta(x) + delta(pi - ds - x)
     if tm > target:
       x0 = x
     else:
@@ -142,26 +102,19 @@ def shortLong(ds):
 
 def lemma_shortlong():
   print("\nLemma %d: sigma_k and lambda_k\n" % lem_shortlong)
-  print("Here we compute Table 2")
-  print("k & a* & d* & mu_k & sigma_k & lambda_k")
+  print("Table 2:")
+  print("k & a*     & d*     & mu_k   & sigma_k & lambda_k")
   for k in range(4, 7):
     a = aStarKFromK(k)
     ds = delta(a)
     mu = aFromDelta(ds/2)
     sk, lk = shortLong(ds)
-    print("%d & %1.4f & %1.4f & %1.4f & %1.4f & %1.4f \\\\" %
+    print("%d & %1.4f & %1.4f & %1.4f & %1.4f  & %1.4f \\\\" %
           (k, a, ds, mu, sk, lk))
-  print("\nCalculations in the lemma:\n")
-  for k in range(4, 7):
-    a = aStarKFromK(k)
-    ds = delta(a)
-    sk, lk = shortLong(ds)
-    print(" k=%d: 2 * delta(lambda_k) = %1.4f, d*/2 = %1.4f" %
-          (k, 2*delta(lk), ds/2))
 
 def antipodal_k456():
-  print("\nLemma %d for k in {4, 5, 6}\n" % lem_antipodal)
-  print("Showing that l = 1:\n")
+  print("\nLemma %d for k in {4, 5, 6}:\n" % lem_antipodal)
+  print("Showing that l = 1:")
   for k in range(4, 7):
     a = aStarKFromK(k)
     ds = delta(a)
@@ -172,11 +125,11 @@ def antipodal_k456():
     check1 = (k-2) * w
     check2 = (k-1) * w
     form = "%d %1.4f %1.4f %1.4f"
-    print("k = %d, d* = %1.4f, sigma = %1.4f, lambda = %1.4f" %
-          (k, ds, sk, lk))
+    print("k = %d:" % k)
+    print("  d* = %1.4f, sigma = %1.4f, lambda = %1.4f" % (ds, sk, lk))
     print("  delta^ = %1.4f,  w = (pi - lambda - d^) = %1.4f" % (dh, w))
     print("  (k-2) * w = %1.4f < pi" % ((k-2) * w))
-  print("\nThe final contradiction of Lemma 6:\n")
+  print("\nThe final contradiction of Lemma %d:" % lem_antipodal)
   for k in range(4, 7):
     a = aStarKFromK(k)
     ds = delta(a)
@@ -185,9 +138,10 @@ def antipodal_k456():
     dh = ds - 2 * (k - 3) * delta(sk)
     ah = aFromDelta(dh)
     w = pi - ah - dh
-    print("k = %d, delta^ = %1.4f, a^ = %1.4f, w = pi - a^ - delta^ = %1.4f" %
-          (k, dh, ah, w))
-    print("   (k-1) * w = %1.4f < pi" % ((k-1) * w))
+    print("k = %d:" % k)
+    print("  delta^ = %1.4f, a^ = %1.4f, w = pi - a^ - delta^ = %1.4f" %
+          (dh, ah, w))
+    print("  (k-1) * w = %1.4f < pi" % ((k-1) * w))
 
 def uptofive3():
   print("\nSection 3.3: Combinations allowed")
@@ -197,12 +151,11 @@ def uptofive3():
     dsk = delta(ask)
     muk = aFromDelta(dsk/2)
     w = pi - muk - dsk
-    print("k=%d mu=%1.4f w = pi - mu - d* = %1.4f (k-1)*w = %1.4f < pi" % 
+    print("k=%d: mu=%1.4f, w = pi - mu - d* = %1.4f => (k-1)*w = %1.4f < pi" % 
           (k, muk, w, (k-1)*w))
 
 print("\\begin{verbatim}")
 print("Source code at: http://github.com/otfried/circle-shortcuts\n")
-deepumbra()
 uptofive1()
 uptofive2()
 uptofive3()
