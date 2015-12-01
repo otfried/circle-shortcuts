@@ -9,8 +9,9 @@ from math import *
 
 # Lemma numbers
 
-lem_antipodal = 9
-lem_shortlong = 10
+lem_antipodal = 11
+lem_upto6combined = 13
+thm_6to7 = 15
 
 # alpha(a)
 def shortcutAngle(a):
@@ -50,32 +51,38 @@ def aStarKFromK(k):
       a0 = am
   return a0
 
+def umbra():
+  print("Section 2:")
+  print("=========\n")
+  print("delta(delta(2)) = %1.5f" % delta(delta(2)))
+
 def uptofive1():
-  print("Section 3.1: No combinations")
-  print("============================\n")
+  print("\nSection 3.1:")
+  print(  "===========\n")
   print("Table 1:")
   print("k  a*     d*     pi - d*")
   for k in range(2, 6):
     ask = aStarKFromK(k)
     print("%d  %1.4f %1.4f %1.4f" % (k, ask, delta(ask), pi - delta(ask)))
   print("%d  %1.4f %1.4f %1.4f" % (6, 2.0, delta(2.0), pi - delta(2.0)))
-
-def uptofive2():
-  print("\nSection 3.2: Antipodal pair combinations")
-  print(  "========================================\n")
-  print("Computing mu_k:")
+  print("\nComputing mu_k:")
   for k in range(2, 6):
     ask = aStarKFromK(k)
     dsk = delta(ask)
     muk = aFromDelta(dsk/2)
     print("mu_%d = %1.4f" % (k, muk))
   print("mu_6 = %1.4f" % (aFromDelta(delta(2)/2)))
+
+
+def uptofive2():
+  print("\nSection 3.3:")
+  print(  "============\n")
   antipodal_k3()
-  lemma_shortlong()
+  table2()
   antipodal_k456()
 
 def antipodal_k3():
-  print("\nLemma %d for k = 3\n" % lem_antipodal)
+  print("Lemma %d for k = 3\n" % lem_antipodal)
   a = aStarKFromK(3)
   ds = delta(a)
   mu = aFromDelta(ds/2)
@@ -100,9 +107,8 @@ def shortLong(ds):
       x1 = x
   return x0, pi - ds - x0
 
-def lemma_shortlong():
-  print("\nLemma %d: sigma_k and lambda_k\n" % lem_shortlong)
-  print("Table 2:")
+def table2():
+  print("\nTable 2:")
   print("k & a*     & d*     & mu_k   & sigma_k & lambda_k")
   for k in range(4, 7):
     a = aStarKFromK(k)
@@ -128,7 +134,7 @@ def antipodal_k456():
     print("k = %d:" % k)
     print("  d* = %1.4f, sigma = %1.4f, lambda = %1.4f" % (ds, sk, lk))
     print("  delta^ = %1.4f,  w = (pi - lambda - d^) = %1.4f" % (dh, w))
-    print("  (k-2) * w = %1.4f < pi" % ((k-2) * w))
+    print("  (k-2) w = %1.4f < pi" % ((k-2) * w))
   print("\nThe final contradiction of Lemma %d:" % lem_antipodal)
   for k in range(4, 7):
     a = aStarKFromK(k)
@@ -141,23 +147,42 @@ def antipodal_k456():
     print("k = %d:" % k)
     print("  delta^ = %1.4f, a^ = %1.4f, w = pi - a^ - delta^ = %1.4f" %
           (dh, ah, w))
-    print("  (k-1) * w = %1.4f < pi" % ((k-1) * w))
+    print("  (k-1) w = %1.4f < pi" % ((k-1) * w))
 
 def uptofive3():
-  print("\nSection 3.3: Combinations allowed")
-  print(  "=================================\n")
+  print("\nSection 3.4, Proof of Lemma %d:" % lem_upto6combined)
+  print(  "===============================\n")
   for k in range(3, 6):
     ask = aStarKFromK(k)
     dsk = delta(ask)
     muk = aFromDelta(dsk/2)
     w = pi - muk - dsk
-    print("k=%d: mu=%1.4f, w = pi - mu - d* = %1.4f => (k-1)*w = %1.4f < pi" % 
+    print("k=%d: mu=%1.4f, w = pi - mu - d* = %1.4f => (k-1)w = %1.4f < pi" % 
           (k, muk, w, (k-1)*w))
+
+def six():
+  print("\nSection 4, Proof of Theorem %d:" % thm_6to7)
+  print(  "===============================\n")
+  ask = aStarKFromK(6)
+  dsk = delta(ask)
+  muk = aFromDelta(dsk/2)
+  w = pi - muk - dsk
+  print("mu=%1.4f, d*=%1.4f, w = pi - mu - d* = %1.4f" % (muk, dsk, w))
+  print(" 4 w = %1.4f < pi" % (4 * w))
+  print(" pi - d* + 5 w = %1.4f < 2pi" % (pi - dsk + 5 * w))
+  print(" delta(pi - d* - mu) = %1.4f" % (delta(w)))
+  dht = dsk - 0.016
+  aht = aFromDelta(dht)
+  print(" d^ = %1.4f, a^ = %1.4f" % (dht, aht))
+  print(" 5 (pi - a^ - d^) = %1.4f < pi" % (5 * (pi - aht - dht)))
+  
 
 print("\\begin{verbatim}")
 print("Source code at: http://github.com/otfried/circle-shortcuts\n")
+umbra()
 uptofive1()
 uptofive2()
 uptofive3()
+six()
 print("\\end{verbatim}")
 
