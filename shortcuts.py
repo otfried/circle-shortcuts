@@ -233,6 +233,11 @@ def seven():
   print("A(a^, d^) < 4 * d^ * (pi - 1.999 - d^) = %1.4f" % A3)
   print("%1.4f + %1.4f + 4 * %1.4f = %1.4f" % (A1, A2, A3, A1 + A2 + 4 * A3))
   #
+  print("\nSeven shortcuts, Proof of Lemma %d:" % lem_thetaset)
+  print(  "===================================\n")
+  print("0.4 - d*/2 = %1.4f, 0.4 + d*/2 = %1.4f" %
+        (0.4 - ds/2, 0.4 + ds/2))
+  # 
   print("\nSeven shortcuts, a short shortcut")
   print(  "=================================\n")
   w = pi - 1.999 - ds
