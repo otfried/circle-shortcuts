@@ -18,6 +18,9 @@ lem_s2longvi = 20
 lem_thetaset = 21
 lem_bound_combining_edges = 22
 
+# precision for binary search
+precision = 1e-12
+
 # alpha(a)
 def shortcutAngle(a):
   return 2 * asin(a/2)
@@ -33,7 +36,7 @@ def delta(a):
 def aFromDelta(d):
   a0 = 0
   a1 = 2.0
-  while a1 - a0 > 0.00000001:
+  while a1 - a0 > precision:
     am = 0.5 * (a0 + a1)
     dm = delta(am)
     if dm > d:
@@ -47,7 +50,7 @@ def aStarKFromK(k):
   a0 = 0
   a1 = 2.0
   target = (k-1) * pi / k
-  while a1 - a0 > 0.00000001:
+  while a1 - a0 > precision:
     am = 0.5 * (a0 + a1)
     tm = am + delta(am)
     if tm > target:
@@ -103,7 +106,7 @@ def shortLong(ds):
   x0 = pi - ds - 2
   x1 = (pi - ds) / 2
   target = ds/2
-  while x1 - x0 > 0.00000001:
+  while x1 - x0 > precision:
     x = 0.5 * (x0 + x1)
     tm = delta(x) + delta(pi - ds - x)
     if tm > target:
