@@ -9,14 +9,15 @@ from math import *
 
 # Lemma numbers
 
-lem_antipodal = 11
-lem_upto6combined = 13
-thm_6to7 = 15
-lem_Sp6 = 18
-lem_s2dht = 19
-lem_s2longvi = 20
-lem_thetaset = 21
-lem_bound_combining_edges = 22
+lem_deep = 4
+lem_antipodal = 10
+lem_upto6combined = 11
+thm_6to7 = 13
+lem_Sp6 = 17
+lem_s2dht = 18
+lem_s2longvi = 19
+lem_thetaset = 20
+lem_bound_combining_edges = 21
 
 # precision for binary search
 precision = 1e-12
@@ -60,7 +61,7 @@ def aStarKFromK(k):
   return a0
 
 def umbra():
-  print("Section 2:")
+  print("Lemma %d:" % lem_deep)
   print("=========\n")
   print("delta(delta(2)) = %1.5f" % delta(delta(2)))
 
@@ -83,8 +84,8 @@ def uptofive1():
 
 
 def uptofive2():
-  print("\nSection 3.3:")
-  print(  "============\n")
+  print("\nLemma %d:" % lem_antipodal)
+  print(  "=========\n")
   antipodal_k3()
   table2()
   antipodal_k456()
@@ -158,8 +159,8 @@ def antipodal_k456():
     print("  (k-1) w = %1.4f < pi" % ((k-1) * w))
 
 def uptofive3():
-  print("\nSection 3.4, Proof of Lemma %d:" % lem_upto6combined)
-  print(  "===============================\n")
+  print("\nProof of Lemma %d:" % lem_upto6combined)
+  print(  "==================\n")
   for k in range(3, 6):
     ask = aStarKFromK(k)
     dsk = delta(ask)
@@ -169,8 +170,8 @@ def uptofive3():
           (k, muk, w, (k-1)*w))
 
 def six():
-  print("\nSection 4, Proof of Theorem %d:" % thm_6to7)
-  print(  "===============================\n")
+  print("\nProof of Theorem %d for k = 6:" % thm_6to7)
+  print(  "==============================\n")
   ask = aStarKFromK(6)
   dsk = delta(ask)
   muk = aFromDelta(dsk/2)
