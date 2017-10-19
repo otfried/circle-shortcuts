@@ -11,13 +11,13 @@ from math import *
 
 lem_deep = 4
 lem_antipodal = 10
-lem_upto6combined = 11
-thm_6to7 = 13
-lem_Sp6 = 17
-lem_s2dht = 18
-lem_s2longvi = 19
-lem_thetaset = 20
-lem_bound_combining_edges = 21
+lem_upto6combined = 12
+thm_6to7 = 14
+lem_Sp6 = 16
+lem_s2dht = 17
+lem_s2longvi = 18
+lem_thetaset = 19
+lem_bound_combining_edges = 20
 
 # precision for binary search
 precision = 1e-12
