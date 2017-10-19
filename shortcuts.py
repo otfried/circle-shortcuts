@@ -11,6 +11,7 @@ from math import *
 
 lem_deep = 4
 lem_antipodal = 10
+lem_shortlong = 11
 lem_upto6combined = 12
 thm_6to7 = 14
 lem_Sp6 = 16
@@ -18,6 +19,8 @@ lem_s2dht = 17
 lem_s2longvi = 18
 lem_thetaset = 19
 lem_bound_combining_edges = 20
+sssec_short = "4.2.1"
+sssec_noshort = "4.2.2"
 
 # precision for binary search
 precision = 1e-12
@@ -66,32 +69,26 @@ def umbra():
   print("delta(delta(2)) = %1.5f" % delta(delta(2)))
 
 def uptofive1():
-  print("\nSection 3.1:")
-  print(  "===========\n")
-  print("Table 1:")
-  print("k  a*     d*     pi - d*")
-  for k in range(2, 6):
-    ask = aStarKFromK(k)
-    print("%d  %1.4f %1.4f %1.4f" % (k, ask, delta(ask), pi - delta(ask)))
-  print("%d  %1.4f %1.4f %1.4f" % (6, 2.0, delta(2.0), pi - delta(2.0)))
-  print("\nComputing mu_k:")
+  print("\nTable 1:")
+  print(  "========\n")
+  print("k  & a*     & d*     & pi - d*& mu")
   for k in range(2, 6):
     ask = aStarKFromK(k)
     dsk = delta(ask)
     muk = aFromDelta(dsk/2)
-    print("mu_%d = %1.4f" % (k, muk))
-  print("mu_6 = %1.4f" % (aFromDelta(delta(2)/2)))
-
+    print("%d  & %1.4f & %1.4f & %1.4f & %1.4f \\\\" %
+          (k, ask, delta(ask), pi - delta(ask), muk))
+  print("%d  & %1.4f & %1.4f & %1.4f & %1.4f \\\\" %
+        (6, 2.0, delta(2.0), pi - delta(2.0), aFromDelta(delta(2)/2)))
 
 def uptofive2():
-  print("\nLemma %d:" % lem_antipodal)
-  print(  "=========\n")
   antipodal_k3()
   table2()
   antipodal_k456()
 
 def antipodal_k3():
-  print("Lemma %d for k = 3\n" % lem_antipodal)
+  print("\nLemma %d for k = 3:" % lem_antipodal)
+  print(  "===================\n")
   a = aStarKFromK(3)
   ds = delta(a)
   mu = aFromDelta(ds/2)
@@ -117,7 +114,8 @@ def shortLong(ds):
   return x0, pi - ds - x0
 
 def table2():
-  print("\nTable 2:")
+  print("\nTable 2 (in Lemma %d):" % lem_shortlong)
+  print(  "======================\n")
   print("k & a*     & d*     & mu_k   & sigma_k & lambda_k")
   for k in range(4, 7):
     a = aStarKFromK(k)
@@ -128,7 +126,8 @@ def table2():
           (k, a, ds, mu, sk, lk))
 
 def antipodal_k456():
-  print("\nLemma %d for k in {4, 5, 6}:\n" % lem_antipodal)
+  print("\nLemma %d for k in {4, 5, 6}:" % lem_antipodal)
+  print(  "============================\n")
   print("Showing that l = 1:")
   for k in range(4, 7):
     a = aStarKFromK(k)
@@ -159,8 +158,8 @@ def antipodal_k456():
     print("  (k-1) w = %1.4f < pi" % ((k-1) * w))
 
 def uptofive3():
-  print("\nProof of Lemma %d:" % lem_upto6combined)
-  print(  "==================\n")
+  print("\nLemma %d:" % lem_upto6combined)
+  print(  "=========\n")
   for k in range(3, 6):
     ask = aStarKFromK(k)
     dsk = delta(ask)
@@ -170,8 +169,8 @@ def uptofive3():
           (k, muk, w, (k-1)*w))
 
 def six():
-  print("\nProof of Theorem %d for k = 6:" % thm_6to7)
-  print(  "==============================\n")
+  print("\nTheorem %d for k = 6:" % thm_6to7)
+  print(  "=====================\n")
   ask = aStarKFromK(6)
   dsk = delta(ask)
   muk = aFromDelta(dsk/2)
@@ -186,8 +185,8 @@ def six():
   print(" 5 (pi - a^ - d^) = %1.4f < pi" % (5 * (pi - aht - dht)))
 
 def seven():
-  print("\nSeven shortcuts, Proof of Lemma %d:" % lem_Sp6)
-  print(  "===================================\n")
+  print("\nLemma %d:" % lem_Sp6)
+  print(  "=========\n")
   ds = pi/2 - 1
   s6, l6 = shortLong(ds)
   dht4 = ds - 8 * delta(s6)
@@ -206,8 +205,8 @@ def seven():
   print("  w = pi - lambda6 - d^(1) = %1.4f" % w)
   print("  4 * w = %1.4f < pi" % (4 * w))
   #
-  print("\nSeven shortcuts, Proof of Lemma %d:" % lem_s2dht)
-  print(  "===================================\n")
+  print("\nLemma %d:" % lem_s2dht)
+  print(  "=========\n")
   v = 1.7
   print("1.7 + lambda6 = %1.4f > pi" % (v+l6))
   print("delta(1.999) = %1.4f < 0.54" % delta(1.999))
@@ -220,8 +219,8 @@ def seven():
   print("  w3 + 2 * w2 + 6 * w1 = %1.4f < 2pi" % (w3+2*w2+6*w1))
   print("  2 * w2 + 8 * w1 = %1.4f < 2pi" % (2 * w2 + 8 * w1))
   # 
-  print("\nSeven shortcuts, Proof of Lemma %d:" % lem_s2longvi)
-  print(  "===================================\n")
+  print("\nLemma %d:" % lem_s2longvi)
+  print(  "=========\n")
   dht = ds - 2 * delta(s6)
   print("d^ = d* - 2 * delta(sigma6) = %1.4f" % dht)
   s3 = 0.8 * pi - dht
@@ -238,20 +237,21 @@ def seven():
   print("%1.4f + %1.4f + 4 * %1.4f = %1.4f < %1.4f = 4 * d^ * pi" %
         (A1, A2, A3, A1 + A2 + 4 * A3, 4 * dht * pi))
   #
-  print("\nSeven shortcuts, Proof of Lemma %d:" % lem_thetaset)
-  print(  "===================================\n")
+  print("\nLemma %d:" % lem_thetaset)
+  print(  "=========\n")
   print("0.4 - d*/2 = %1.4f, 0.4 + d*/2 = %1.4f" %
         (0.4 - ds/2, 0.4 + ds/2))
   # 
-  print("\nSeven shortcuts, a short shortcut exists")
-  print(  "========================================\n")
+  print("\nFinal contradiction of Section %s (a short shortcut exists):" %
+        sssec_short)
+  print(  "===============================================================\n")
   w = pi - 1.999 - ds
   print("pi - 1.999 - d* = %1.4f" % w)
   print("pi - 2 * 0.4 = %1.4f > %1.4f = 4 * %1.4f" % (pi - 2 * 0.4, 4 * w, w))
   print("0.4 + d*/2 = %1.4f > %1.4f" % (0.4 + ds/2, w))
   # 
-  print("\nSeven shortcuts, Proof of Lemma %d:" % lem_bound_combining_edges)
-  print(  "===================================\n")
+  print("\nLemma %d:" % lem_bound_combining_edges)
+  print(  "=========\n")
   print("s1 + s2 <= 5 * pi - 7 * ds - 5 * lambda6 = %1.4f < 2.34" %
         (5*pi - 7*ds - 5*l6))
   print("delta(sigma6) + delta(2.34 - sigma6) = %1.4f < 0.2" %
@@ -263,8 +263,9 @@ def seven():
   print("1.999 + sigma6 = %1.4f > %1.4f = pi - d*" %
         (1.999 + s6, pi - ds))
   # 
-  print("\nSeven shortcuts, no short shortcut")
-  print(  "==================================\n")
+  print("\nFinal contradiction of Section %s (no short shortcut):" %
+        sssec_noshort)
+  print(  "=========================================================\n")
   zeta = pi/2 - 1.4
   print("zeta = pi/2 - 1.4 = %1.4f" % zeta)
   w1 = pi - l6 - ds
